@@ -8,14 +8,17 @@ import {
 } from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
 
-type Options =
-  | {
-      contentlayerConfigPath?: string;
-    }
-  | undefined;
+type Options = {
+  contentlayerConfigPath: string;
+};
 
-const astroContentlayer = (options?: Options): AstroIntegration => {
-  const configPath = options?.contentlayerConfigPath ?? ".";
+const run = runMain({
+  tracingServiceName: "astro-contentlayer",
+  verbose: true,
+});
+
+const astroContentlayer = (options: Options): AstroIntegration => {
+  const configPath = options.contentlayerConfigPath;
 
   return {
     name: "astro-contentlayer",
@@ -33,10 +36,5 @@ const astroContentlayer = (options?: Options): AstroIntegration => {
     },
   };
 };
-
-const run = runMain({
-  tracingServiceName: "astro-contentlayer",
-  verbose: process.env.CL_DEBUG !== undefined,
-});
 
 export { astroContentlayer };

@@ -1,7 +1,11 @@
 import { getConfig, generateDotpkg, runMain, logGenerateInfo, } from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
+const run = runMain({
+    tracingServiceName: "astro-contentlayer",
+    verbose: true,
+});
 const astroContentlayer = (options) => {
-    const configPath = options?.contentlayerConfigPath ?? ".";
+    const configPath = options.contentlayerConfigPath;
     return {
         name: "astro-contentlayer",
         hooks: {
@@ -11,9 +15,5 @@ const astroContentlayer = (options) => {
         },
     };
 };
-const run = runMain({
-    tracingServiceName: "astro-contentlayer",
-    verbose: process.env.CL_DEBUG !== undefined,
-});
 export { astroContentlayer };
 //# sourceMappingURL=index.js.map

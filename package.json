@@ -1,6 +1,6 @@
 {
   "name": "astro-contentlayer",
-  "version": "0.1.5-SNAPSHOT",
+  "version": "0.1.0",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {

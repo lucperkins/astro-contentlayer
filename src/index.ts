@@ -1,6 +1,6 @@
 import { AstroConfig, AstroIntegration } from "astro";
 import * as core from "@contentlayer/core";
-import { E, OT, pipe, S, T } from "@contentlayer/utils/effect";
+import { pipe, T } from "@contentlayer/utils/effect";
 
 type Input = {
   config: AstroConfig;

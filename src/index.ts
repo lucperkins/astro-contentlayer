@@ -1,18 +1,20 @@
-import { AstroConfig, AstroIntegration } from "astro";
+import { AstroIntegration } from "astro";
 import { getConfig, generateDotpkg, Config, runMain } from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
 
-const astroContentlayer = ({
-  config,
-}: {
-  config: AstroConfig;
-}): AstroIntegration => {
+type Options =
+  | {
+      contentlayerConfigPath?: string;
+    }
+  | undefined;
+
+const astroContentlayer = (options?: Options): AstroIntegration => {
+  const configPath = options?.contentlayerConfigPath ?? ".";
+
   return {
     name: "astro-contentlayer",
     hooks: {
       "astro:build:start": async () => {
-        const configPath = config.base;
-
         await pipe(
           getConfig({ configPath }),
           T.chain((config: Config) =>
@@ -30,4 +32,4 @@ const run = runMain({
   verbose: process.env.CL_DEBUG !== undefined,
 });
 
-export default astroContentlayer;
+export { astroContentlayer };

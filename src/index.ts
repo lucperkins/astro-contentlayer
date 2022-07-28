@@ -1,32 +1,33 @@
 import { AstroConfig, AstroIntegration } from "astro";
-import * as core from "@contentlayer/core";
+import { getConfig, generateDotpkg, Config, runMain } from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
 
-type Input = {
+const astroContentlayer = ({
+  config,
+}: {
   config: AstroConfig;
-};
-
-const createPlugin = ({ config }: Input): AstroIntegration => {
+}): AstroIntegration => {
   return {
     name: "astro-contentlayer",
     hooks: {
       "astro:build:start": async () => {
         const configPath = config.base;
-        const getConfig = core.getConfig({ configPath });
-        const generate = T.chain((config: core.Config) =>
-          core.generateDotpkg({ config, verbose: false })
-        );
-        const log = T.tap(core.logGenerateInfo);
 
-        await pipe(getConfig, generate, log, runMain);
+        await pipe(
+          getConfig({ configPath }),
+          T.chain((config: Config) =>
+            generateDotpkg({ config, verbose: false })
+          ),
+          run
+        );
       },
     },
   };
 };
 
-const runMain = core.runMain({
+const run = runMain({
   tracingServiceName: "astro-contentlayer",
   verbose: process.env.CL_DEBUG !== undefined,
 });
 
-export default createPlugin;
+export default astroContentlayer;

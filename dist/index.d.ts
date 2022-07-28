@@ -1,5 +1,6 @@
-import { AstroConfig, AstroIntegration } from "astro";
-declare const astroContentlayer: ({ config, }: {
-    config: AstroConfig;
-}) => AstroIntegration;
-export default astroContentlayer;
+import { AstroIntegration } from "astro";
+declare type Options = {
+    contentlayerConfigPath?: string;
+} | undefined;
+declare const astroContentlayer: (options?: Options) => AstroIntegration;
+export { astroContentlayer };

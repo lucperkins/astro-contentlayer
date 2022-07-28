@@ -1,4 +1,4 @@
-import { getConfig, generateDotpkg, runMain } from "@contentlayer/core";
+import { getConfig, generateDotpkg, runMain, logGenerateInfo, } from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
 const astroContentlayer = (options) => {
     const configPath = options?.contentlayerConfigPath ?? ".";
@@ -6,7 +6,7 @@ const astroContentlayer = (options) => {
         name: "astro-contentlayer",
         hooks: {
             "astro:build:start": async () => {
-                await pipe(getConfig({ configPath }), T.chain((config) => generateDotpkg({ config, verbose: false })), run);
+                await pipe(getConfig({ configPath }), T.chain((config) => generateDotpkg({ config, verbose: false })), T.tap(logGenerateInfo), run);
             },
         },
     };

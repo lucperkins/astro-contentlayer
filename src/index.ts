@@ -1,5 +1,11 @@
 import { AstroIntegration } from "astro";
-import { getConfig, generateDotpkg, Config, runMain } from "@contentlayer/core";
+import {
+  getConfig,
+  generateDotpkg,
+  Config,
+  runMain,
+  logGenerateInfo,
+} from "@contentlayer/core";
 import { pipe, T } from "@contentlayer/utils/effect";
 
 type Options =
@@ -20,6 +26,7 @@ const astroContentlayer = (options?: Options): AstroIntegration => {
           T.chain((config: Config) =>
             generateDotpkg({ config, verbose: false })
           ),
+          T.tap(logGenerateInfo),
           run
         );
       },

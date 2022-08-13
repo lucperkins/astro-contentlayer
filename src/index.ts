@@ -1,15 +1,16 @@
-import { AstroIntegration } from "astro";
 import {
-  getConfig,
-  generateDotpkg,
   Config,
-  runMain,
+  generateDotpkg,
+  getConfig,
   logGenerateInfo,
+  runMain,
 } from "@contentlayer/core";
-import { pipe, T } from "@contentlayer/utils/effect";
+import { T, pipe } from "@contentlayer/utils/effect";
+import { AstroIntegration } from "astro";
 
 type Options = {
   contentlayerConfigPath: string;
+  verbose: boolean;
 };
 
 const run = runMain({
@@ -18,17 +19,15 @@ const run = runMain({
 });
 
 const astroContentlayer = (options: Options): AstroIntegration => {
-  const configPath = options.contentlayerConfigPath;
+  const { contentlayerConfigPath, verbose } = options;
 
   return {
     name: "astro-contentlayer",
     hooks: {
       "astro:build:start": async () => {
         await pipe(
-          getConfig({ configPath }),
-          T.chain((config: Config) =>
-            generateDotpkg({ config, verbose: false })
-          ),
+          getConfig({ configPath: contentlayerConfigPath }),
+          T.chain((config: Config) => generateDotpkg({ config, verbose })),
           T.tap(logGenerateInfo),
           run
         );

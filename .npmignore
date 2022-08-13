@@ -2,3 +2,5 @@ node_modules/
 pnmp-lock.yaml
 tsconfig.json
 README.md
+flake.*
+.envrc

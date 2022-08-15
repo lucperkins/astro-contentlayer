@@ -4,23 +4,28 @@
   inputs = { dev.url = "github:the-nix-way/dev-templates"; };
 
   outputs = { self, dev }:
-    let inherit (dev.lib) flake-utils nixpkgs;
-    in flake-utils.lib.eachDefaultSystem (system:
+    let
+      inherit (dev.lib) flake-utils nixpkgs;
+      nodeOverlay = self: super: rec {
+        nodejs = super.nodejs-18_x;
+        pnpm = super.nodePackages.pnpm;
+        yarn = super.yarn.override { inherit nodejs; };
+      };
+    in
+    flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = import nixpkgs { inherit system; };
-
-        inherit (pkgs) mkShell node2nix;
-
-        nodejs = pkgs.nodejs-18_x;
-        pnpm = pkgs.nodePackages.pnpm;
-        yarn = (pkgs.yarn.override { inherit nodejs; });
-      in {
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ nodeOverlay ];
+        };
+      in
+      {
         devShells = {
-          default = mkShell {
-            buildInputs = [ node2nix nodejs pnpm yarn ];
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [ node2nix nodejs pnpm yarn ];
 
             shellHook = ''
-              echo "node `${nodejs}/bin/node --version`"
+              echo "node `${pkgs.nodejs}/bin/node --version`"
             '';
           };
         };

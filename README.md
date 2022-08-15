@@ -8,11 +8,7 @@ This integration sets up Astro to run `contentlayer build` in the background eve
 
 ## Installation
 
-First, install the integration in your Astro project:
-
-```shell
-npm install astro-contentlayer
-```
+First, install the integration in your Astro project. This package is *not* published to npm, so you'll need to use a reference to this repository.
 
 ## Configuration
 

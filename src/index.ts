@@ -9,8 +9,8 @@ import { T, pipe } from "@contentlayer/utils/effect";
 import { AstroIntegration } from "astro";
 
 type Options = {
-  contentlayerConfigPath: string;
-  verbose: boolean;
+  contentlayerConfigPath?: string;
+  verbose?: boolean;
 };
 
 const run = runMain({
@@ -19,15 +19,20 @@ const run = runMain({
 });
 
 const astroContentlayer = (options: Options): AstroIntegration => {
-  const { contentlayerConfigPath, verbose } = options;
+  let { contentlayerConfigPath, verbose } = options;
+  const configPathSetting =
+    contentlayerConfigPath ?? "./contentlayer.config.js";
+  const verboseSetting = verbose ?? false;
 
   return {
     name: "astro-contentlayer",
     hooks: {
       "astro:build:start": async () => {
         await pipe(
-          getConfig({ configPath: contentlayerConfigPath }),
-          T.chain((config: Config) => generateDotpkg({ config, verbose })),
+          getConfig({ configPath: configPathSetting }),
+          T.chain((config: Config) =>
+            generateDotpkg({ config, verbose: verboseSetting })
+          ),
           T.tap(logGenerateInfo),
           run
         );

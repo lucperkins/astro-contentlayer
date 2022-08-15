@@ -22,6 +22,7 @@ export default defineConfig({
   integrations: [
     astroContentlayer({
       contentlayerConfigPath: "./contentlayer.config.ts",
+      verbose: true,
     }),
     // Other integration
   ],
@@ -30,9 +31,10 @@ export default defineConfig({
 
 ### Configuration options
 
-| Option                   | Description                                                                                                                  | Required? |
+| Option                   | Description                                                                                                                  | Default |
 | :----------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :-------- |
-| `contentLayerConfigPath` | The path to your Contentlayer configuration. This should typically be `./contentlayer.config.js` (or `.ts` for [TypeScript]) | ✅        |
+| `contentLayerConfigPath` | The path to your Contentlayer configuration. This should typically be `./contentlayer.config.js` (or `.ts` for [TypeScript]) | `./contentlayer.config.js` |
+| `verbose`                | Toggle verbose output.                                                                                                       | `false`                 |
 
 [astro]: https://astro.build
 [contentlayer]: https://contentlayer.dev
